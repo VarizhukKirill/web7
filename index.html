@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №7 — JavaScript сценарії (Варіант 3)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f5f7;
+            color: #222222;
+            line-height: 1.5;
+            padding: 25px 15px 45px;
+        }
+
+        .main-header {
+            max-width: 820px;
+            margin: 0 auto 20px;
+            background-color: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .main-header h1 {
+            font-size: 1.45rem;
+            color: #1f2937;
+            cursor: pointer;
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .subtitle {
+            margin-top: 6px;
+            font-size: 0.95rem;
+            color: #555555;
+        }
+
+        .status-bar {
+            margin-top: 12px;
+            display: inline-block;
+            background-color: #eef2f6;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 20px 22px;
+        }
+
+        .card h2 {
+            font-size: 1.12rem;
+            color: #1f2937;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .hint {
+            font-size: 0.9rem;
+            color: #555555;
+            margin-bottom: 14px;
+        }
+
+        code {
+            font-family: Consolas, Monaco, monospace;
+            background-color: #f1f3f5;
+            color: #333333;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 0.88em;
+        }
+
+        .interactive-text-box {
+            background-color: #fafafa;
+            border: 1px solid #e2e2e2;
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .interactive-text-box h3 {
+            font-size: 1rem;
+            color: #222222;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .interactive-tag {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+            color: #1f2937;
+            user-select: none;
+            display: inline-block;
+        }
+
+        .task-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #333333;
+        }
+
+        input[type="number"] {
+            padding: 6px 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            width: 80px;
+            font-size: 0.95rem;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.86rem;
+            line-height: 1.45;
+            color: #222222;
+            background-color: #fcfcfc;
+            resize: vertical;
+        }
+
+        textarea:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #ffffff;
+        }
+
+        .btn-primary {
+            align-self: flex-start;
+            background-color: #3b82f6;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-small {
+            background-color: #e5e7eb;
+            color: #374151;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .btn-small:hover {
+            background-color: #d1d5db;
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 0.88rem;
+            color: #444444;
+        }
+
+        .gallery {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .img-card {
+            background: #fafafa;
+            border: 1px solid #e2e2e2;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+            flex: 1 1 260px;
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.25s ease, filter 0.25s ease;
+        }
+
+        .img-card figcaption {
+            margin-top: 6px;
+            font-size: 0.84rem;
+            color: #555555;
+        }
+
+        .status-note {
+            margin-top: 12px;
+            padding: 8px 12px;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            font-size: 0.88rem;
+            color: #334155;
+        }
+    </style>
+</head>
+<body onload="handleBodyLoad()" 
+      onfocus="handleBodyFocus()" 
+      onblur="handleBodyBlur()" 
+      onbeforeprint="handleBeforePrint()" 
+      onafterprint="handleAfterPrint()"
+      ononline="handleOnlineStatus(true)"
+      onoffline="handleOnlineStatus(false)">
+
+    <header class="main-header">
+        <h1 id="mainTitle" onclick="changeTitleStyle(this)" ondblclick="resetTitleStyle(this)">
+            Лабораторна робота №7. Динамічні елементи вебсайтів на JavaScript
+        </h1>
+        <p class="subtitle">
+            Студент групи 241-1 Варижук Кірілл • <b>Варіант №3</b>
+        </p>
+        <div id="bodyStatusBar" class="status-bar">Ініціалізація сторінки...</div>
+    </header>
+
+    <main class="container">
+        <!-- Завдання 1 та 2 -->
+        <section class="card">
+            <h2>Завдання 1 та 2. Обробка подій вікна &lt;body&gt; та текстових елементів</h2>
+            <p class="hint">
+                Спробуйте натиснути на головний заголовок <code>&lt;h1&gt;</code> (клік / подвійний клік), 
+                навести курсор на виділені теги нижче або перемкнути вкладку браузера (події <code>onblur</code> / <code>onfocus</code>).
+            </p>
+            
+            <div class="interactive-text-box">
+                <h3 onmouseover="highlightHeading(this)" onmouseout="unhighlightHeading(this)">
+                    Наведіть курсор на цей заголовок &lt;h3&gt; (onmouseover / onmouseout)
+                </h3>
+                <p>
+                    У цьому абзаці є виділений фрагмент 
+                    <b onmousedown="styleBoldDown(this)" onmouseup="styleBoldUp(this)" class="interactive-tag">
+                        &lt;b&gt; (затисніть кнопку миші)
+                    </b> 
+                    та курсивний текст 
+                    <i onclick="toggleItalicStyle(this)" class="interactive-tag">
+                        &lt;i&gt; (натисніть лівою кнопкою миші)
+                    </i>.
+                </p>
+            </div>
+
+            <div class="log-wrapper">
+                <div class="log-header">
+                    <span>Журнал подій сторінки:</span>
+                    <button type="button" class="btn-small" onclick="clearEventLog()">Очистити журнал</button>
+                </div>
+                <textarea id="eventLog" rows="5" readonly></textarea>
+            </div>
+        </section>
+
+        <!-- Завдання 3.3 -->
+        <section class="card">
+            <h2>Завдання 3 (Варіант 3.3). Властивості поточної сторінки</h2>
+            <p class="hint">Натисніть кнопку «Run Task», щоб отримати інформацію про поточний документ та вікно браузера.</p>
+            <form id="pagePropsForm" class="task-form">
+                <button type="button" class="btn-primary" onclick="runPagePropertiesTask()">Run Task</button>
+                <textarea id="pagePropsOutput" rows="7" placeholder="Тут з'являться властивості поточної сторінки..." readonly></textarea>
+            </form>
+        </section>
+
+        <!-- Завдання 4 -->
+        <section class="card">
+            <h2>Завдання 4. Обробка подій миші для малюнків</h2>
+            <p class="hint">Взаємодійте із зображеннями: наводьте курсор, натискайте або робіть подвійний клік.</p>
+            <div class="gallery">
+                <figure class="img-card">
+                    <img id="img1" 
+                         src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80" 
+                         alt="Мікросхема"
+                         onmouseover="onImageHover(this, 'Малюнок 1: Наведено курсор (onmouseover)')"
+                         onmouseout="onImageLeave(this)"
+                         onclick="onImageClick(this, 'Малюнок 1')">
+                    <figcaption>Малюнок 1 (Наведення + Клік)</figcaption>
+                </figure>
+
+                <figure class="img-card">
+                    <img id="img2" 
+                         src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80" 
+                         alt="Програмний код"
+                         ondblclick="onImageDblClick(this)"
+                         onmousedown="onImageMouseDown(this)"
+                         onmouseup="onImageMouseUp(this)">
+                    <figcaption>Малюнок 2 (Затискання + Подвійний клік)</figcaption>
+                </figure>
+            </div>
+            <div id="imageEventStatus" class="status-note">Очікування дії над зображенням...</div>
+        </section>
+
+        <!-- Завдання 5 -->
+        <section class="card">
+            <h2>Завдання 5 (Варіант 3). Пошук цифр за допомогою регулярних виразів</h2>
+            <p class="hint">Введіть довільний текст із числами та натисніть «Пошук інформації».</p>
+            <form id="regexForm" class="task-form">
+                <label for="regexInput">Вхідний текст:</label>
+                <textarea id="regexInput" rows="3">Студент групи 241-1 виконав 7 лабораторних робіт у 2026 році на 100 балів.</textarea>
+                <button type="button" class="btn-primary" onclick="searchDigitsWithRegex()">Пошук інформації</button>
+                <textarea id="regexOutput" rows="4" placeholder="Результат пошуку цифр (/\d/g та /\d+/g)..." readonly></textarea>
+            </form>
+        </section>
+
+        <!-- Завдання 6.3 -->
+        <section class="card">
+            <h2>Завдання 6 (Варіант 6.3). Обробка одновимірного масиву</h2>
+            <p class="hint">
+                Задано одновимірний масив <b>A</b> розміру <b>N</b>. Знайти серед усіх додатних елементів масиву найменший елемент та його індекс.
+            </p>
+            <form id="arrayForm" class="task-form">
+                <div class="input-row">
+                    <label for="arraySize">Розмір масиву N:</label>
+                    <input type="number" id="arraySize" value="10" min="1" max="50">
+                    <button type="button" class="btn-primary" onclick="runArrayTask()">Array Task</button>
+                </div>
+                <textarea id="arrayOutput" rows="5" placeholder="Тут з'явиться згенерований масив та результат пошуку..." readonly></textarea>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        function logEvent(message) {
+            const time = new Date().toLocaleTimeString('uk-UA');
+            const formatted = `[${time}] ${message}`;
+            console.log(formatted);
+
+            const logArea = document.getElementById('eventLog');
+            if (logArea) {
+                logArea.value += formatted + '\n';
+                logArea.scrollTop = logArea.scrollHeight;
+            }
+        }
+
+        function clearEventLog() {
+            document.getElementById('eventLog').value = '';
+        }
+
+        function handleBodyLoad() {
+            const bar = document.getElementById('bodyStatusBar');
+            bar.textContent = 'Подія onload: Сторінку повністю завантажено!';
+            logEvent('<body> onload: Увесь вміст вебсторінки, стилі та скрипти завантажено.');
+        }
+
+        function handleBodyFocus() {
+            const bar = document.getElementById('bodyStatusBar');
+            bar.textContent = 'Подія onfocus: Вікно браузера активне (отримало фокус).';
+            logEvent('<body> onfocus: Вікно отримало фокус.');
+        }
+
+        function handleBodyBlur() {
+            const bar = document.getElementById('bodyStatusBar');
+            bar.textContent = 'Подія onblur: Вікно втратило фокус.';
+            logEvent('<body> onblur: Вікно втратило фокус.');
+        }
+
+        function handleBeforePrint() {
+            logEvent('<body> onbeforeprint: Підготовка документа до друку.');
+        }
+
+        function handleAfterPrint() {
+            logEvent('<body> onafterprint: Друк документа завершено або скасовано.');
+        }
+
+        function handleOnlineStatus(isOnline) {
+            const statusText = isOnline ? 'ononline: З’єднання з мережею відновлено.' : 'onoffline: Перехід в автономний режим.';
+            document.getElementById('bodyStatusBar').textContent = statusText;
+            logEvent(`<body> ${statusText}`);
+        }
+
+        function changeTitleStyle(el) {
+            el.style.backgroundColor = '#fef08a';
+            el.style.color = '#1f2937';
+            logEvent('<h1> onclick: Змінено колір фону головного заголовка.');
+        }
+
+        function resetTitleStyle(el) {
+            el.style.backgroundColor = 'transparent';
+            el.style.color = '#1f2937';
+            logEvent('<h1> ondblclick: Відновлено початковий стиль головного заголовка.');
+        }
+
+        function highlightHeading(el) {
+            el.style.backgroundColor = '#dbeafe';
+            el.style.color = '#1d4ed8';
+            el.style.paddingLeft = '14px';
+            logEvent('<h3> onmouseover: Курсор наведено на підзаголовок.');
+        }
+
+        function unhighlightHeading(el) {
+            el.style.backgroundColor = 'transparent';
+            el.style.color = '#222222';
+            el.style.paddingLeft = '8px';
+            logEvent('<h3> onmouseout: Курсор покинув підзаголовок.');
+        }
+
+        function styleBoldDown(el) {
+            el.style.backgroundColor = '#dc2626';
+            el.style.color = '#ffffff';
+            logEvent('<b> onmousedown: Кнопку миші затиснуто на тегу <b>.');
+        }
+
+        function styleBoldUp(el) {
+            el.style.backgroundColor = '#e5e7eb';
+            el.style.color = '#1f2937';
+            logEvent('<b> onmouseup: Кнопку миші відпущено.');
+        }
+
+        function toggleItalicStyle(el) {
+            const isHighlighted = el.dataset.active === 'true';
+            if (!isHighlighted) {
+                el.style.backgroundColor = '#16a34a';
+                el.style.color = '#ffffff';
+                el.style.fontWeight = 'bold';
+                el.dataset.active = 'true';
+                logEvent('<i> onclick: Активовано виділення тегу <i>.');
+            } else {
+                el.style.backgroundColor = '#e5e7eb';
+                el.style.color = '#1f2937';
+                el.style.fontWeight = 'normal';
+                el.dataset.active = 'false';
+                logEvent('<i> onclick: Знято виділення тегу <i>.');
+            }
+        }
+
+        function runPagePropertiesTask() {
+            const info = [
+                `Заголовок документа (document.title): ${document.title}`,
+                `Повна URL-адреса (window.location.href): ${window.location.href}`,
+                `Протокол (window.location.protocol): ${window.location.protocol}`,
+                `Шлях до файлу (window.location.pathname): ${window.location.pathname}`,
+                `Кодування документа (document.characterSet): ${document.characterSet}`,
+                `Дата останньої зміни (document.lastModified): ${document.lastModified}`,
+                `Розмір області перегляду: ${window.innerWidth} x ${window.innerHeight} px`
+            ].join('\n');
+
+            document.getElementById('pagePropsOutput').value = info;
+            console.log('--- Властивості поточної сторінки ---\n' + info);
+        }
+
+        function setImageStatus(text) {
+            document.getElementById('imageEventStatus').textContent = text;
+            logEvent(text);
+        }
+
+        function onImageHover(img, msg) {
+            img.style.transform = 'scale(1.03)';
+            setImageStatus(msg);
+        }
+
+        function onImageLeave(img) {
+            img.style.transform = 'scale(1)';
+            setImageStatus('Малюнок 1: Курсор покинув зображення (onmouseout)');
+        }
+
+        function onImageClick(img, name) {
+            const isGray = img.style.filter === 'grayscale(100%)';
+            img.style.filter = isGray ? 'none' : 'grayscale(100%)';
+            setImageStatus(`${name}: Клік мишею (onclick) — перемкнуто чорно-білий фільтр.`);
+        }
+
+        function onImageMouseDown(img) {
+            img.style.transform = 'scale(0.97)';
+            setImageStatus('Малюнок 2: Затиснуто кнопку миші (onmousedown).');
+        }
+
+        function onImageMouseUp(img) {
+            img.style.transform = 'scale(1)';
+            setImageStatus('Малюнок 2: Відпущено кнопку миші (onmouseup).');
+        }
+
+        function onImageDblClick(img) {
+            const isInverted = img.style.filter === 'invert(100%)';
+            img.style.filter = isInverted ? 'none' : 'invert(100%)';
+            setImageStatus('Малюнок 2: Подвійний клік (ondblclick) — інверсія кольорів.');
+        }
+
+        function searchDigitsWithRegex() {
+            const text = document.getElementById('regexInput').value;
+            const output = document.getElementById('regexOutput');
+
+            const singleDigits = text.match(/\d/g);
+            const numbers = text.match(/\d+/g);
+
+            if (!singleDigits) {
+                output.value = 'У введеному тексті цифр не знайдено.';
+                return;
+            }
+
+            const result = [
+                `Знайдені окремі цифри (/\\d/g): ${singleDigits.join(', ')}`,
+                `Загальна кількість цифр: ${singleDigits.length}`,
+                `Знайдені числа (/\\d+/g): ${numbers.join(', ')}`
+            ].join('\n');
+
+            output.value = result;
+            console.log('Результат пошуку цифр:', result);
+        }
+
+        function runArrayTask() {
+            const n = parseInt(document.getElementById('arraySize').value, 10);
+            const output = document.getElementById('arrayOutput');
+
+            if (isNaN(n) || n <= 0) {
+                output.value = 'Помилка: введіть коректний розмір масиву N > 0.';
+                return;
+            }
+
+            const A = [];
+            for (let i = 0; i < n; i++) {
+                A.push(Math.floor(Math.random() * 51) - 20);
+            }
+
+            let minPositive = Infinity;
+            let minIndex = -1;
+
+            for (let i = 0; i < A.length; i++) {
+                if (A[i] > 0 && A[i] < minPositive) {
+                    minPositive = A[i];
+                    minIndex = i;
+                }
+            }
+
+            let resultText = `Згенерований масив A (N = ${n}):\n[${A.join(', ')}]\n\n`;
+
+            if (minIndex !== -1) {
+                resultText += `Найменший серед додатних елементів: ${minPositive}\n`;
+                resultText += `Індекс цього елемента (нумерація з 0): ${minIndex} (позиція №${minIndex + 1})`;
+            } else {
+                resultText += 'У масиві немає жодного додатного елемента (> 0).';
+            }
+
+            output.value = resultText;
+            console.log(resultText);
+        }
+    </script>
+</body>
+</html>
